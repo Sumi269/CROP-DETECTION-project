@@ -8,7 +8,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
       role: "ai",
-      text: "👋 Hello Farmer! Ask me anything about crops, weather, or farming."
+      text: "👋 Hello Farmer! Ask me anything about crops, weather, fungus, fertilizers, or farming."
     }
   ]);
 
@@ -22,21 +22,32 @@ export default function Chatbot() {
   // =============================
   const startVoice = () => {
 
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+    try {
 
-    const recognition = new SpeechRecognition();
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
-    recognition.lang = "en-US";
+      if (!SpeechRecognition) {
+        alert("Voice recognition not supported");
+        return;
+      }
 
-    recognition.start();
+      const recognition = new SpeechRecognition();
 
-    recognition.onresult = (event) => {
-      const text = event.results[0][0].transcript;
-      setInput(text);
-    };
+      recognition.lang = "en-US";
+      recognition.start();
 
-    recognitionRef.current = recognition;
+      recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        setInput(text);
+      };
+
+      recognitionRef.current = recognition;
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // =============================
@@ -48,27 +59,53 @@ export default function Chatbot() {
 
     if (!msg.trim()) return;
 
-    const updated = [...messages, { role: "user", text: msg }];
+    // user message
+    const updated = [
+      ...messages,
+      {
+        role: "user",
+        text: msg
+      }
+    ];
 
     setMessages(updated);
+
     setInput("");
+
     setLoading(true);
 
     try {
 
-      const res = await API.post("/chat", {
+      console.log("SENDING:", msg);
+
+      const res = await API.post("/api/chat",  {
         message: msg
       });
 
+      console.log("RESPONSE:", res.data);
+
       setMessages([
         ...updated,
-        { role: "ai", text: res.data.reply }
+        {
+          role: "ai",
+          text:
+            res.data.reply ||
+            "🌾 No response from AI"
+        }
       ]);
 
     } catch (err) {
+
+      console.log("FULL ERROR:", err);
+
       setMessages([
         ...updated,
-        { role: "ai", text: "⚠ AI service failed" }
+        {
+          role: "ai",
+          text:
+            err?.response?.data?.error ||
+            "⚠ Unable to fetch response. Server error."
+        }
       ]);
     }
 
@@ -79,9 +116,19 @@ export default function Chatbot() {
   // TEXT TO SPEECH 🔊
   // =============================
   const speak = (text) => {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    window.speechSynthesis.speak(speech);
+
+    try {
+
+      const speech = new SpeechSynthesisUtterance(text);
+
+      speech.lang = "en-US";
+      speech.rate = 1;
+
+      window.speechSynthesis.speak(speech);
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -90,33 +137,52 @@ export default function Chatbot() {
 
       <div className="chat-container">
 
-        <h1>🌾 Smart Agriculture AI (ChatGPT Style)</h1>
+        <h1>🌾 Smart Agriculture AI</h1>
 
+        {/* CHAT BOX */}
         <div className="chat-box">
 
           {messages.map((m, i) => (
-            <div key={i} className={m.role}>
+            <div
+              key={i}
+              className={m.role === "user" ? "user" : "ai"}
+            >
+
               <p>{m.text}</p>
 
               {m.role === "ai" && (
-                <button onClick={() => speak(m.text)}>
+                <button
+                  className="speak-btn"
+                  onClick={() => speak(m.text)}
+                >
                   🔊
                 </button>
               )}
+
             </div>
           ))}
 
-          {loading && <p>🤖 Thinking...</p>}
+          {loading && (
+            <div className="ai">
+              <p>🤖 Thinking...</p>
+            </div>
+          )}
 
         </div>
 
+        {/* INPUT */}
         <div className="chat-input">
 
           <input
+            type="text"
+            placeholder="Ask anything..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask anything..."
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                sendMessage();
+              }
+            }}
           />
 
           <button onClick={() => sendMessage()}>

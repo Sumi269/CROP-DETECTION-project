@@ -1,57 +1,125 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
-const { authMiddleware } = require("../middleware/auth");
 
 // =============================
-// GOOGLE SEARCH FUNCTION
+// LOCAL FARMING AI
 // =============================
+function getLocalReply(message) {
 
-async function searchGoogle(query) {
-  const API_KEY = process.env.SERPAPI_KEY;
+  const msg = message.toLowerCase();
 
-  const url = `https://serpapi.com/search.json?q=${query}&api_key=${API_KEY}`;
+  // fungus
+  if (
+    msg.includes("fungus") ||
+    msg.includes("fungal")
+  ) {
+    return `
+🌱 How to prevent crop fungus:
 
-  const res = await axios.get(url);
+1. Avoid overwatering
+2. Ensure proper sunlight
+3. Remove infected leaves
+4. Maintain plant spacing
+5. Improve air circulation
+6. Use neem oil spray
+7. Use copper fungicide if needed
+`;
+  }
 
-  const results = res.data.organic_results || [];
+  // fertilizer
+  if (msg.includes("fertilizer")) {
+    return `
+🌾 Fertilizer Tips:
 
-  return results.slice(0, 5).map(item => ({
-    title: item.title,
-    snippet: item.snippet,
-    link: item.link
-  }));
+• Nitrogen → leaf growth
+• Phosphorus → root growth
+• Potassium → fruit quality
+
+Use organic compost whenever possible.
+`;
+  }
+
+  // irrigation
+  if (msg.includes("irrigation")) {
+    return `
+💧 Irrigation Tips:
+
+• Water early morning
+• Avoid overwatering
+• Use drip irrigation
+• Maintain soil moisture
+`;
+  }
+
+  // tomato
+  if (msg.includes("tomato")) {
+    return `
+🍅 Tomato Farming Tips:
+
+• Requires 6-8 hours sunlight
+• Avoid excess water
+• Use potassium fertilizer
+• Protect from leaf spot disease
+`;
+  }
+
+  // potato
+  if (msg.includes("potato")) {
+    return `
+🥔 Potato Farming Tips:
+
+• Use well-drained soil
+• Avoid waterlogging
+• Monitor late blight disease
+• Use certified seeds
+`;
+  }
+
+  // default
+  return `
+🌾 Ask me about:
+• Crops
+• Diseases
+• Fertilizers
+• Irrigation
+• Weather
+• Fungus prevention
+`;
 }
 
 // =============================
-// CHAT API
+// CHAT ROUTE
 // =============================
+router.post("/", async (req, res) => {
 
-router.post("/", authMiddleware, async (req, res) => {
   try {
+
+    console.log("CHAT REQUEST:", req.body);
+
     const { message } = req.body;
 
     if (!message) {
-      return res.status(400).json({ error: "Message required" });
+      return res.status(400).json({
+        success: false,
+        error: "Message required"
+      });
     }
 
-    // 🌐 STEP 1: SEARCH INTERNET
-    const results = await searchGoogle(message);
+    // LOCAL AI RESPONSE
+    const reply = getLocalReply(message);
 
-    // 🧠 STEP 2: FORMAT LIKE CHATGPT
-    const reply = results.map(r =>
-      `📌 ${r.title}\n${r.snippet}\n🔗 ${r.link}\n`
-    ).join("\n");
-
-    res.json({
+    return res.json({
       success: true,
       reply
     });
 
   } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      error: "Chat failed"
+
+    console.log("CHAT ERROR:", err);
+
+    return res.status(500).json({
+      success: false,
+      error: "Server error"
     });
   }
 });
