@@ -1,70 +1,192 @@
 .detect-page {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #14532d);
-  padding: 20px;
+  padding: 30px;
+  background:
+    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
+    url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1600&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
 }
 
 .detect-card {
   width: 100%;
-  max-width: 520px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 25px;
+  max-width: 550px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  border-radius: 25px;
+  padding: 30px;
   color: white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  animation: fadeIn 0.5s ease;
 }
 
-h1 {
+.detect-card h1 {
   text-align: center;
+  font-size: 2rem;
   margin-bottom: 10px;
 }
 
-.camera-video {
-  width: 100%;
-  border-radius: 12px;
-  margin-top: 10px;
+.detect-card p {
+  text-align: center;
+  color: #d1fae5;
+  margin-bottom: 20px;
 }
 
+.camera-video,
 .preview-image {
   width: 100%;
-  border-radius: 12px;
-  margin-top: 10px;
+  border-radius: 18px;
+  margin-top: 15px;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.2);
+}
+
+.upload-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  border: 2px dashed rgba(255,255,255,0.4);
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.upload-box:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.02);
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
+  padding: 14px;
   border: none;
-  border-radius: 10px;
-  background: #22c55e;
-  color: white;
+  border-radius: 14px;
+  margin-top: 15px;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button:hover {
-  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+.camera-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
 }
 
 .detect-btn {
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
 }
 
-.result-box {
-  margin-top: 15px;
-  padding: 15px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-group button {
+  flex: 1;
 }
 
 .error-box {
-  background: #ef4444;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  background: rgba(239,68,68,0.2);
+  border: 1px solid #ef4444;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.result-box {
+  margin-top: 25px;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.1);
+  animation: fadeIn 0.4s ease;
+}
+
+.result-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+
+.result-grid div {
+  background: rgba(255,255,255,0.08);
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.result-grid span {
+  display: block;
+  color: #bbf7d0;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.result-grid h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.advice-box {
+  margin-top: 20px;
+  background: rgba(16,185,129,0.15);
+  border-left: 4px solid #10b981;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.advice-box h3 {
+  margin-bottom: 8px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media(max-width: 600px) {
+
+  .detect-card {
+    padding: 20px;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
 }

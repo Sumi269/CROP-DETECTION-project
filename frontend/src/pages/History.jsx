@@ -18,7 +18,6 @@ export default function History() {
 
       const res = await API.get("/api/admin/all");
 
-      // REMOVE DUPLICATES (crop + disease wise)
       const unique = Array.from(
         new Map(
           (res.data.predictions || []).map(item => [
@@ -43,7 +42,9 @@ export default function History() {
 
       <div className="history-page">
 
-        <h1>🌿 Detection History</h1>
+        <h1 className="history-title">
+          🌿 Detection History
+        </h1>
 
         {loading ? (
           <div className="loading">
@@ -61,7 +62,7 @@ export default function History() {
 
                 <div className="history-card" key={i}>
 
-                  {/* IMAGE SIDE */}
+                  {/* IMAGE */}
                   <div className="history-image">
 
                     <img
@@ -81,26 +82,15 @@ export default function History() {
 
                   </div>
 
-                  {/* DETAILS SIDE */}
+                  {/* DETAILS */}
                   <div className="history-details">
 
                     <h2>{item.crop}</h2>
+
                     <h3>{item.disease}</h3>
 
-                    <div className="info-grid">
-
-                      <div className="info-box">
-                        🎯 Confidence: {item.confidence}%
-                      </div>
-
-                      <div className="info-box">
-                        ⚠️ Severity: {item.severity}
-                      </div>
-
-                    </div>
-
-                    <div className="advice-box">
-                      🤖 AI Advice: {item.advice}
+                    <div className="info-box">
+                      🎯 Confidence: {item.confidence}%
                     </div>
 
                     <div className="time-box">
