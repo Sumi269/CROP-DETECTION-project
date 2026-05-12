@@ -1,0 +1,9 @@
+flask
+flask-cors
+tensorflow
+numpy
+pillow
+pymongo
+requests
+h5py
+keras
