@@ -1,0 +1,75 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#071028;
+  color:white;
+  overflow-x:hidden;
+}
+
+a{
+  text-decoration:none;
+  color:white;
+}
+
+button{
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  opacity:0.9;
+  transform:scale(1.03);
+}
+
+img{
+  max-width:100%;
+}
+
+::-webkit-scrollbar{
+  width:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:#071028;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1e293b;
+  border-radius:20px;
+}
+
+.container{
+  width:90%;
+  max-width:1400px;
+  margin:auto;
+}
+
+.glass{
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+}
+
+@media(max-width:768px){
+
+  h1{
+    font-size:32px !important;
+  }
+
+  h2{
+    font-size:24px !important;
+  }
+
+  p{
+    font-size:15px !important;
+  }
+
+}

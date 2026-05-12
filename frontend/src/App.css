@@ -1,0 +1,4 @@
+.app-container{
+  min-height:100vh;
+  background:linear-gradient(to bottom,#020617,#0f172a);
+}
