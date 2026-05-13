@@ -5,6 +5,10 @@ from utils import predict_image
 import os
 
 app = Flask(__name__)
+
+# =========================
+# CORS
+# =========================
 CORS(app)
 
 # =========================
@@ -14,7 +18,16 @@ CORS(app)
 def home():
     return jsonify({
         "success": True,
-        "message": "🌾 Crop Detection AI Running"
+        "message": "🌾 Crop Detection AI Running Successfully"
+    })
+
+# =========================
+# HEALTH CHECK ROUTE
+# =========================
+@app.route("/health")
+def health():
+    return jsonify({
+        "status": "healthy"
     })
 
 # =========================
@@ -33,8 +46,16 @@ def detect():
 
         file = request.files["image"]
 
+        if file.filename == "":
+            return jsonify({
+                "success": False,
+                "error": "Empty file"
+            }), 400
+
+        # OPEN IMAGE
         img = Image.open(file.stream).convert("RGB")
 
+        # AI PREDICTION
         result = predict_image(img)
 
         return jsonify({
@@ -52,13 +73,14 @@ def detect():
         }), 500
 
 # =========================
-# RUN SERVER
+# RENDER SERVER
 # =========================
 if __name__ == "__main__":
 
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 10000))
 
     app.run(
         host="0.0.0.0",
-        port=port
+        port=port,
+        debug=False
     )
