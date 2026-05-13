@@ -1,16 +1,25 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from PIL import Image
 from utils import predict_image
+import os
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route("/", methods=["GET"])
+# =========================
+# HOME ROUTE
+# =========================
+@app.route("/")
 def home():
     return jsonify({
         "success": True,
-        "message": "AI Running"
+        "message": "🌾 Crop Detection AI Running"
     })
 
+# =========================
+# DETECT ROUTE
+# =========================
 @app.route("/api/detect", methods=["POST"])
 def detect():
 
@@ -24,25 +33,32 @@ def detect():
 
         file = request.files["image"]
 
-        img = Image.open(file.stream)
+        img = Image.open(file.stream).convert("RGB")
 
         result = predict_image(img)
 
-        # RANDOM IMAGE CHECK
-        is_plant = result["confidence"] >= 45
-
         return jsonify({
             "success": True,
-            "isPlant": is_plant,
             "data": result
         })
 
     except Exception as e:
+
+        print("ERROR:", str(e))
 
         return jsonify({
             "success": False,
             "error": str(e)
         }), 500
 
+# =========================
+# RUN SERVER
+# =========================
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+
+    port = int(os.environ.get("PORT", 5001))
+
+    app.run(
+        host="0.0.0.0",
+        port=port
+    )
