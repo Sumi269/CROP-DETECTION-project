@@ -5,7 +5,11 @@ from utils import predict_image
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r"/*": {"origins": "*"}},
+    supports_credentials=True
+)
 
 # =========================
 # HOME ROUTE
