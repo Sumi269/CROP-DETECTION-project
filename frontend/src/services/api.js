@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://crop-detection-project-3.onrender.com"
+  baseURL: "https://crop-detection-project-1.onrender.com"
 });
 
 // attach token automatically
