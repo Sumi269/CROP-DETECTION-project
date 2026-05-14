@@ -13,7 +13,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Legend
+ 
 } from "recharts";
 
 export default function Dashboard() {
