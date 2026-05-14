@@ -380,7 +380,27 @@ const DetectCrop = () => {
                     )}%
                   </h3>
                 </div>
+<div className="top3-box">
 
+  <span>Top Predictions</span>
+
+  {result.top3.map((item, index) => (
+
+    <div key={index} className="top3-item">
+
+      <p>
+        {item.label.replace(/_/g, " ")}
+      </p>
+
+      <strong>
+        {item.confidence}%
+      </strong>
+
+    </div>
+
+  ))}
+
+</div>
               </div>
 
             </div>
