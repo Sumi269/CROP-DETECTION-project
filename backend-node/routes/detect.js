@@ -42,9 +42,8 @@ router.post(
         "image",
         fs.createReadStream(req.file.path)
       );
-
-      const response = await axios.post(
-        "http://127.0.0.1:5001/api/detect",
+const response = await axios.post(
+      "https://crop-detection-project-3.onrender.com/api/detect",
         form,
         {
           headers: form.getHeaders()
